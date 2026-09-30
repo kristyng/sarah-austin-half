@@ -191,14 +191,14 @@ tr:last-child td{border-bottom:0}
   <!-- ZONES -->
   <section id="zones" role="tabpanel" aria-labelledby="tab-zones" hidden>
     <h2>Heart rate zones</h2>
-    <p class="intro">Karvonen method. <strong>Max HR <span class="mono" id="hr-max">191</span></strong> (220 − age 29) · <strong>Resting HR <span class="mono" id="hr-rest">55</span></strong> (from your COROS) · Heart rate reserve <span class="mono" id="hr-res">136</span>.</p>
+    <p class="intro">Karvonen method. <strong>Max HR <span class="mono" id="hr-max">191</span></strong> (220 − age 29) · <strong>Resting HR <span class="mono" id="hr-rest">53</span></strong> (COROS, Sep 30, 2026) · Heart rate reserve <span class="mono" id="hr-res">138</span>.</p>
     <div class="tbl"><table>
       <thead><tr><th>Zone</th><th>% of reserve</th><th>Heart rate</th><th>Used for in this plan</th></tr></thead>
       <tbody id="hr-zones">
-        <tr><td><strong>Z1</strong> Recovery</td><td class="mono">50–60%</td><td class="mono">123–137 bpm</td><td>Warm-ups, cool-downs, jogs between 800s</td></tr>
-        <tr><td><strong>Z2</strong> Easy</td><td class="mono">60–70%</td><td class="mono">137–150 bpm</td><td>Tue and Thu easy runs, most of every long run</td></tr>
-        <tr><td><strong>Z3</strong> Steady</td><td class="mono">70–80%</td><td class="mono">150–164 bpm</td><td>Goal half pace, the early miles of the race</td></tr>
-        <tr><td><strong>Z4</strong> Threshold</td><td class="mono">80–90%</td><td class="mono">164–177 bpm</td><td>Tempo runs, 800s, threshold test, late race</td></tr>
+        <tr><td><strong>Z1</strong> Recovery</td><td class="mono">50–60%</td><td class="mono">122–136 bpm</td><td>Warm-ups, cool-downs, jogs between 800s</td></tr>
+        <tr><td><strong>Z2</strong> Easy</td><td class="mono">60–70%</td><td class="mono">136–150 bpm</td><td>Tue and Thu easy runs, most of every long run</td></tr>
+        <tr><td><strong>Z3</strong> Steady</td><td class="mono">70–80%</td><td class="mono">150–163 bpm</td><td>Goal half pace, the early miles of the race</td></tr>
+        <tr><td><strong>Z4</strong> Threshold</td><td class="mono">80–90%</td><td class="mono">163–177 bpm</td><td>Tempo runs, 800s, threshold test, late race</td></tr>
         <tr><td><strong>Z5</strong> Max</td><td class="mono">90–100%</td><td class="mono">177–191 bpm</td><td>The final sprint only. Not a training target.</td></tr>
       </tbody>
     </table></div>
@@ -211,7 +211,7 @@ tr:last-child td{border-bottom:0}
       <tbody>
         <tr><td><strong>Easy / Zone 2</strong></td><td class="mono">Z2 (under 150 bpm)</td><td class="mono">10:45–12:00 /mi</td><td>Tue, Thu, most of every long run</td></tr>
         <tr><td><strong>Goal half pace</strong></td><td class="mono">Z3 to low Z4 (155–170 bpm)</td><td class="mono">9:05–9:10 /mi</td><td>Wednesday goal-pace runs, end of long runs in Weeks 9–10</td></tr>
-        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">Low Z4 (164–174 bpm)</td><td class="mono">9:25–9:35 → 9:10 /mi</td><td>Wednesday tempo runs. Starts at 9:25–9:35 and gets faster as you do. Effort about 7/10.</td></tr>
+        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">Low Z4 (163–174 bpm)</td><td class="mono">9:25–9:35 → 9:10 /mi</td><td>Wednesday tempo runs. Starts at 9:25–9:35 and gets faster as you do. Effort about 7/10.</td></tr>
       </tbody>
     </table></div>
 
@@ -300,7 +300,7 @@ tr:last-child td{border-bottom:0}
   ];
 
   // Heart rate zones (Karvonen). REST_HR from Sarah's COROS.
-  const MAX_HR=191, REST_HR=55;
+  const MAX_HR=191, REST_HR=53;
   (function(){
     const res=MAX_HR-REST_HR, b=[.5,.6,.7,.8,.9,1].map(x=>Math.round(REST_HR+x*res));
     document.getElementById('hr-max').textContent=MAX_HR;
