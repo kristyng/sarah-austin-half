@@ -55,7 +55,8 @@ p{margin:0}
 .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 .tab:focus-visible,.chk:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-section{display:grid;gap:16px}
+section{display:grid;gap:16px;scroll-margin-top:64px}
+[hidden]{display:none!important}
 .intro{max-width:68ch;color:var(--muted)}
 .intro strong{color:var(--fg)}
 
@@ -359,7 +360,13 @@ tr:last-child td{border-bottom:0}
   function show(id){
     tabs.forEach(t=>{const on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});
   }
-  tabs.forEach(t=>t.addEventListener('click',()=>show(t.getAttribute('aria-controls'))));
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    const id=t.getAttribute('aria-controls');
+    show(id);
+    const sec=document.getElementById(id);
+    const nav=document.querySelector('.tabs');
+    if(nav.getBoundingClientRect().top<=1||sec.getBoundingClientRect().top<0)sec.scrollIntoView({block:'start'});
+  }));
 
   // Open the tab that holds the current week and bring that week into view.
   function currentTab(){return document.getElementById('now-train')?'train':(document.getElementById('now-bridge')?'bridge':(today>=d('2026-11-23')?'train':'bridge'))}
