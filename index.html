@@ -173,7 +173,7 @@ tr:last-child td{border-bottom:0}
       </div>
     </div>
 
-    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Workout / test</span><span><i class="sw" style="background:var(--long)"></i>Long run</span></div>
+    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Threshold test</span><span><i class="sw" style="background:var(--long)"></i>Long run</span></div>
     <div class="prog-row"><span id="prog-bridge-txt">0 of 0 runs done</span><div class="progress"><i id="prog-bridge"></i></div></div>
     <div id="bridge-weeks" style="display:grid;gap:12px"></div>
   </section>
@@ -182,7 +182,7 @@ tr:last-child td{border-bottom:0}
   <section id="train" role="tabpanel" aria-labelledby="tab-train" hidden>
     <h2>12-week build</h2>
     <p class="intro">Tuesday and Thursday are easy. <strong>Wednesday is the quality day</strong> (tempo, 800s, goal pace); its mileage includes a 1-mile warm-up and cool-down and runs a little long on interval days. <strong>Sunday is the long run</strong>, at easy effort unless noted. Weeks 4 and 8 are cutbacks: don't skip them.</p>
-    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Workout</span><span><i class="sw" style="background:var(--long)"></i>Long run</span><span><i class="sw" style="background:var(--accent)"></i>Race</span></div>
+    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Tempo, intervals, goal pace</span><span><i class="sw" style="background:var(--long)"></i>Long run</span><span><i class="sw" style="background:var(--accent)"></i>Race</span></div>
     <div class="prog-row"><span id="prog-train-txt">0 of 0 runs done</span><div class="progress"><i id="prog-train"></i></div></div>
     <div id="train-weeks" style="display:grid;gap:12px"></div>
   </section>
@@ -294,6 +294,14 @@ tr:last-child td{border-bottom:0}
   const noonToday=()=>{const t=new Date();t.setHours(12,0,0,0);return t};
   let today=noonToday();
   const kindLabel={easy:'Easy',workout:'Workout',long:'Long run',race:'Race'};
+  const sessionName=(kind,detail)=>{
+    if(kind!=='workout')return kindLabel[kind];
+    if(/threshold test/i.test(detail))return 'Threshold test';
+    if(/800m/i.test(detail))return 'Intervals';
+    if(/goal pace/i.test(detail))return 'Goal pace';
+    if(/tempo/i.test(detail))return 'Tempo';
+    return 'Workout';
+  };
 
   function render(list,el,isBridge){
     el.innerHTML='';
@@ -319,7 +327,7 @@ tr:last-child td{border-bottom:0}
         cell.className='day '+kind+(done[id]?' is-done':'');
         cell.innerHTML=`<div class="day-top"><span class="day-name">${dn} <span>${fmt(date)}</span></span>
           <input type="checkbox" class="chk" id="c-${id}" aria-label="Mark ${dn} ${fmt(date)} done" ${done[id]?'checked':''}></div>
-          <div class="mi">${mi}<small> mi</small></div><div class="kind">${kindLabel[kind]}</div><div class="detail">${detail}</div>`;
+          <div class="mi">${mi}<small> mi</small></div><div class="kind">${sessionName(kind,detail)}</div><div class="detail">${detail}</div>`;
         cell.querySelector('input').addEventListener('change',ev=>{
           if(ev.target.checked)done[id]=1;else delete done[id];
           cell.classList.toggle('is-done',ev.target.checked);save();progress();
