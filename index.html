@@ -190,14 +190,28 @@ tr:last-child td{border-bottom:0}
 
   <!-- ZONES -->
   <section id="zones" role="tabpanel" aria-labelledby="tab-zones" hidden>
-    <h2>Zones</h2>
+    <h2>Heart rate zones</h2>
+    <p class="intro">Karvonen method. <strong>Max HR <span class="mono" id="hr-max">191</span></strong> (220 − age 29) · <strong>Resting HR <span class="mono" id="hr-rest">60</span></strong> (placeholder until you check your watch) · Heart rate reserve <span class="mono" id="hr-res">131</span>.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Zone</th><th>% of reserve</th><th>Heart rate</th><th>Used for in this plan</th></tr></thead>
+      <tbody id="hr-zones">
+        <tr><td><strong>Z1</strong> Recovery</td><td class="mono">50–60%</td><td class="mono">126–139 bpm</td><td>Warm-ups, cool-downs, jogs between 800s</td></tr>
+        <tr><td><strong>Z2</strong> Easy</td><td class="mono">60–70%</td><td class="mono">139–152 bpm</td><td>Tue and Thu easy runs, most of every long run</td></tr>
+        <tr><td><strong>Z3</strong> Steady</td><td class="mono">70–80%</td><td class="mono">152–165 bpm</td><td>Goal half pace, the early miles of the race</td></tr>
+        <tr><td><strong>Z4</strong> Threshold</td><td class="mono">80–90%</td><td class="mono">165–178 bpm</td><td>Tempo runs, 800s, threshold test, late race</td></tr>
+        <tr><td><strong>Z5</strong> Max</td><td class="mono">90–100%</td><td class="mono">178–191 bpm</td><td>The final sprint only. Not a training target.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot">Formula: resting HR + (% × (max HR − resting HR)). Check your resting HR monthly; it usually drops as you get fitter. If you use your inhaler before a run, your heart rate can read high, so go by pace and effort that day.</p>
+
+    <h2>Pace and effort</h2>
     <p class="intro">Based on your real race, not your watch's estimates: last year's Austin Half in <span class="mono">2:08:38</span> at an average of <span class="mono">171</span> bpm. That puts your threshold around <span class="mono">9:25–9:35</span>/mi and about <span class="mono">174</span> bpm today. <strong>These are provisional.</strong> Replace them with your threshold test results on Nov 4.</p>
     <div class="tbl"><table>
       <thead><tr><th>Effort</th><th>Heart rate</th><th>Pace</th><th>Used for</th></tr></thead>
       <tbody>
-        <tr><td><strong>Easy / Zone 2</strong></td><td class="mono">&lt; 152 bpm</td><td class="mono">10:45–12:00 /mi</td><td>Tue, Thu, most of every long run</td></tr>
-        <tr><td><strong>Goal half pace</strong></td><td class="mono">163–170 bpm</td><td class="mono">9:05–9:10 /mi</td><td>Wednesday goal-pace runs, end of long runs in Weeks 9–10</td></tr>
-        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">165–174 bpm</td><td class="mono">9:25–9:35 → 9:10 /mi</td><td>Wednesday tempo runs. Starts at 9:25–9:35 and gets faster as you do. Effort about 7/10.</td></tr>
+        <tr><td><strong>Easy / Zone 2</strong></td><td class="mono">Z2 (under 152 bpm)</td><td class="mono">10:45–12:00 /mi</td><td>Tue, Thu, most of every long run</td></tr>
+        <tr><td><strong>Goal half pace</strong></td><td class="mono">Z3 to low Z4 (155–170 bpm)</td><td class="mono">9:05–9:10 /mi</td><td>Wednesday goal-pace runs, end of long runs in Weeks 9–10</td></tr>
+        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">Low Z4 (165–174 bpm)</td><td class="mono">9:25–9:35 → 9:10 /mi</td><td>Wednesday tempo runs. Starts at 9:25–9:35 and gets faster as you do. Effort about 7/10.</td></tr>
       </tbody>
     </table></div>
 
@@ -285,6 +299,15 @@ tr:last-child td{border-bottom:0}
       ['Tue','2027-02-09',2,E,'Easy + 3 strides'],['Wed','2027-02-10',2,E,'Easy'],['Thu','2027-02-11',2,E,'Easy'],['Sun','2027-02-14',13.1,R,'Austin Half Marathon. Goal sub-2:00.']]},
   ];
 
+  // Heart rate zones (Karvonen). Update REST_HR when Sarah checks her watch.
+  const MAX_HR=191, REST_HR=60;
+  (function(){
+    const res=MAX_HR-REST_HR, b=[.5,.6,.7,.8,.9,1].map(x=>Math.round(REST_HR+x*res));
+    document.getElementById('hr-max').textContent=MAX_HR;
+    document.getElementById('hr-rest').textContent=REST_HR;
+    document.getElementById('hr-res').textContent=res;
+    document.querySelectorAll('#hr-zones tr').forEach((tr,i)=>{tr.children[2].textContent=b[i]+'–'+b[i+1]+' bpm'});
+  })();
   const KEY='sarah-ahm-done-v1';
   let done={};
   try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){done={}}
