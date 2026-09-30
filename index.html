@@ -291,7 +291,8 @@ tr:last-child td{border-bottom:0}
 
   const d=s=>new Date(s+'T12:00:00');
   const fmt=s=>d(s).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  const today=new Date();today.setHours(12,0,0,0);
+  const noonToday=()=>{const t=new Date();t.setHours(12,0,0,0);return t};
+  let today=noonToday();
   const kindLabel={easy:'Easy',workout:'Workout',long:'Long run',race:'Race'};
 
   function render(list,el,isBridge){
@@ -336,25 +337,45 @@ tr:last-child td{border-bottom:0}
       document.getElementById('prog-'+k+'-txt').textContent=`${n} of ${all.length} runs done`;
     });
   }
-  render(bridge,document.getElementById('bridge-weeks'),true);
-  render(train,document.getElementById('train-weeks'),false);
-  progress();
-
   const race=d('2027-02-14');
-  const days=Math.max(0,Math.round((race-today)/864e5));
-  document.getElementById('daysToRace').textContent=days;
+  function renderAll(){
+    render(bridge,document.getElementById('bridge-weeks'),true);
+    render(train,document.getElementById('train-weeks'),false);
+    progress();
+    const days=Math.round((race-today)/864e5);
+    document.getElementById('daysToRace').textContent=days>0?days:(days===0?'Race day':'Done');
+  }
+  renderAll();
 
   const tabs=[...document.querySelectorAll('.tab')];
   function show(id){
     tabs.forEach(t=>{const on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});
-    try{localStorage.setItem(KEY+'-tab',id)}catch(e){}
   }
   tabs.forEach(t=>t.addEventListener('click',()=>show(t.getAttribute('aria-controls'))));
-  let start=today>=d('2026-11-23')?'train':'bridge';
+
+  // Open the tab that holds the current week and bring that week into view.
+  function currentTab(){return document.getElementById('now-train')?'train':(document.getElementById('now-bridge')?'bridge':(today>=d('2026-11-23')?'train':'bridge'))}
+  function focusNow(){
+    const el=document.getElementById('now-'+currentTab());
+    if(el)el.scrollIntoView({block:'center',behavior:'auto'});
+  }
   const h=(location.hash||'').slice(1);
-  if(['bridge','train','zones'].includes(h))start=h;
-  else{try{const s=localStorage.getItem(KEY+'-tab');if(s)start=s}catch(e){}}
-  show(start);
+  show(['bridge','train','zones'].includes(h)?h:currentTab());
+  if(!h)requestAnimationFrame(focusNow);
+
+  // Keep "This week" correct if the page stays open past midnight.
+  function checkDate(){
+    const t=noonToday();
+    if(t.getTime()!==today.getTime()){
+      const wasTab=tabs.find(x=>x.getAttribute('aria-selected')==='true').getAttribute('aria-controls');
+      const oldNow=currentTab();
+      today=t;renderAll();
+      if(wasTab===oldNow)show(currentTab());
+    }
+  }
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkDate()});
+  window.addEventListener('focus',checkDate);
+  setInterval(checkDate,60000);
 })();
 </script>
 </body>
