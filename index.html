@@ -135,14 +135,15 @@ tr:last-child td{border-bottom:0}
   <!-- BRIDGE -->
   <section id="bridge" role="tabpanel" aria-labelledby="tab-bridge">
     <h2>Bridge: keep fitness until training starts</h2>
-    <p class="intro">You've been running about <strong>2 times a week</strong>, with a gap in September. Your goal for the next 8 weeks is simple: <strong>get to 4 easy runs a week and a comfortable 6-mile Sunday long run</strong>, so Week 1 of training feels routine. No hard workouts except one threshold test.</p>
+    <p class="intro">You've been running about <strong>2 times a week</strong>, with a gap in September. Your goal for the next 8 weeks is simple: <strong>get to 4 easy runs a week and a comfortable 6-mile Sunday long run</strong>, so Week 1 of training feels routine. No hard workouts, except an optional threshold test.</p>
 
     <div class="grid2">
       <div class="card">
         <h3>How to run the bridge</h3>
         <ul>
           <li><strong>Consistency beats distance.</strong> 3 runs a week for 2 weeks, then 4.</li>
-          <li><strong>Easy means easy:</strong> 10:45–12:00/mi, heart rate under about 150 bpm (Zone 2). It will feel slow. That's the point.</li>
+          <li><strong>Easy means easy:</strong> 10:45–12:00/mi, heart rate under about 153 bpm (Zone 2). It will feel slow. That's the point.</li>
+          <li><strong>Long runs by feel first:</strong> you should be able to hold a full conversation. Keep heart rate under about 153 for the first half and under about 160 by the end. In Austin heat it will drift up, so slow down or take a short walk break rather than pushing through.</li>
           <li><strong>Long run grows 1 mile at a time</strong>, from 4 to 7 miles. Don't jump back to 11 just because you've done it before.</li>
           <li><strong>Strides</strong> from Week 3: after an easy run, 4–6 × 20 seconds quick and relaxed, walking back to recover.</li>
         </ul>
@@ -169,12 +170,12 @@ tr:last-child td{border-bottom:0}
         <ul>
           <li>You've run 4 days a week for at least 3 weeks.</li>
           <li>A 6-mile long run feels comfortable.</li>
-          <li>You've done the threshold test and updated your zones.</li>
+          <li>Your easy runs stay under about 153 bpm without much effort.</li>
         </ul>
       </div>
     </div>
 
-    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Threshold test</span><span><i class="sw" style="background:var(--long)"></i>Long run</span></div>
+    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Optional threshold test</span><span><i class="sw" style="background:var(--long)"></i>Long run</span></div>
     <div class="prog-row"><span id="prog-bridge-txt">0 of 0 runs done</span><div class="progress"><i id="prog-bridge"></i></div></div>
     <div id="bridge-weeks" style="display:grid;gap:12px"></div>
   </section>
@@ -191,33 +192,33 @@ tr:last-child td{border-bottom:0}
   <!-- ZONES -->
   <section id="zones" role="tabpanel" aria-labelledby="tab-zones" hidden>
     <h2>Heart rate zones</h2>
-    <p class="intro">Karvonen method. <strong>Max HR <span class="mono" id="hr-max">191</span></strong> (220 − age 29) · <strong>Resting HR <span class="mono" id="hr-rest">53</span></strong> (COROS, Sep 30, 2026) · Heart rate reserve <span class="mono" id="hr-res">138</span>.</p>
+    <p class="intro">Karvonen method. <strong>Max HR <span class="mono" id="hr-max">196</span></strong> (estimated from your long runs; the 220 − age formula gives 191, which is too low for you) · <strong>Resting HR <span class="mono" id="hr-rest">53</span></strong> (COROS, Sep 30, 2026) · Heart rate reserve <span class="mono" id="hr-res">143</span>.</p>
     <div class="tbl"><table>
       <thead><tr><th>Zone</th><th>% of reserve</th><th>Heart rate</th><th>Used for in this plan</th></tr></thead>
       <tbody id="hr-zones">
-        <tr><td><strong>Z1</strong> Recovery</td><td class="mono">50–60%</td><td class="mono">122–136 bpm</td><td>Warm-ups, cool-downs, jogs between 800s</td></tr>
-        <tr><td><strong>Z2</strong> Easy</td><td class="mono">60–70%</td><td class="mono">136–150 bpm</td><td>Tue and Thu easy runs, most of every long run</td></tr>
-        <tr><td><strong>Z3</strong> Steady</td><td class="mono">70–80%</td><td class="mono">150–163 bpm</td><td>Goal half pace, the early miles of the race</td></tr>
-        <tr><td><strong>Z4</strong> Threshold</td><td class="mono">80–90%</td><td class="mono">163–177 bpm</td><td>Tempo runs, 800s, threshold test, late race</td></tr>
-        <tr><td><strong>Z5</strong> Max</td><td class="mono">90–100%</td><td class="mono">177–191 bpm</td><td>The final sprint only. Not a training target.</td></tr>
+        <tr><td><strong>Z1</strong> Recovery</td><td class="mono">50–60%</td><td class="mono">125–139 bpm</td><td>Warm-ups, cool-downs, jogs between 800s</td></tr>
+        <tr><td><strong>Z2</strong> Easy</td><td class="mono">60–70%</td><td class="mono">139–153 bpm</td><td>Tue and Thu easy runs, most of every long run</td></tr>
+        <tr><td><strong>Z3</strong> Steady</td><td class="mono">70–80%</td><td class="mono">153–167 bpm</td><td>Goal half pace, the early miles of the race</td></tr>
+        <tr><td><strong>Z4</strong> Threshold</td><td class="mono">80–90%</td><td class="mono">167–182 bpm</td><td>Tempo runs, 800s, late race</td></tr>
+        <tr><td><strong>Z5</strong> Max</td><td class="mono">90–100%</td><td class="mono">182–196 bpm</td><td>The final sprint only. Not a training target.</td></tr>
       </tbody>
     </table></div>
     <p class="foot">Formula: resting HR + (% × (max HR − resting HR)). Check your resting HR monthly; it usually drops as you get fitter. If you use your inhaler before a run, your heart rate can read high, so go by pace and effort that day.</p>
 
     <h2>Pace and effort</h2>
-    <p class="intro">Based on your real race, not your watch's estimates: last year's Austin Half in <span class="mono">2:08:38</span> at an average of <span class="mono">171</span> bpm. That puts your threshold around <span class="mono">9:25–9:35</span>/mi and about <span class="mono">174</span> bpm today. <strong>These are provisional.</strong> Replace them with your threshold test results on Nov 4.</p>
+    <p class="intro">Based on your real race, not your watch's estimates: last year's Austin Half in <span class="mono">2:08:38</span> at an average of <span class="mono">171</span> bpm. That puts your threshold pace around <span class="mono">9:25–9:35</span>/mi today. If you do the optional threshold test on Nov 4, use its results instead.</p>
     <div class="tbl"><table>
       <thead><tr><th>Effort</th><th>Heart rate</th><th>Pace</th><th>Used for</th></tr></thead>
       <tbody>
-        <tr><td><strong>Easy / Zone 2</strong></td><td class="mono">Z2 (under 150 bpm)</td><td class="mono">10:45–12:00 /mi</td><td>Tue, Thu, most of every long run</td></tr>
-        <tr><td><strong>Goal half pace</strong></td><td class="mono">Z3 to low Z4 (155–170 bpm)</td><td class="mono">9:05–9:10 /mi</td><td>Wednesday goal-pace runs, end of long runs in Weeks 9–10</td></tr>
-        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">Low Z4 (163–174 bpm)</td><td class="mono">9:25–9:35 → 9:10 /mi</td><td>Wednesday tempo runs. Starts at 9:25–9:35 and gets faster as you do. Effort about 7/10.</td></tr>
+        <tr><td><strong>Easy / Zone 2</strong></td><td class="mono">Z2 (under 153 bpm)</td><td class="mono">10:45–12:00 /mi</td><td>Tue, Thu, most of every long run</td></tr>
+        <tr><td><strong>Goal half pace</strong></td><td class="mono">Z3 to low Z4 (160–173 bpm)</td><td class="mono">9:05–9:10 /mi</td><td>Wednesday goal-pace runs, end of long runs in Weeks 9–10</td></tr>
+        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">Low Z4 (167–177 bpm)</td><td class="mono">9:25–9:35 → 9:10 /mi</td><td>Wednesday tempo runs. Starts at 9:25–9:35 and gets faster as you do. Effort about 7/10.</td></tr>
       </tbody>
     </table></div>
 
     <div class="grid2">
       <div class="card">
-        <h3>Threshold test (Wed, Nov 4)</h3>
+        <h3>Optional threshold test (Wed, Nov 4)</h3>
         <ul>
           <li>10–15 min easy warm-up.</li>
           <li>30 min at the hardest steady effort you can hold, on flat ground.</li>
@@ -229,7 +230,7 @@ tr:last-child td{border-bottom:0}
         <h3>Checkpoints for sub-2</h3>
         <ul>
           <li><strong>Weeks 6–7:</strong> 30-min tempo at 9:15–9:25 and 800s at 8:50–9:00 feel controlled.</li>
-          <li><strong>Weeks 9–10:</strong> 3–4 mi at 9:05 with HR at or under about 170.</li>
+          <li><strong>Weeks 9–10:</strong> 3–4 mi at 9:05 with HR at or under about 173.</li>
           <li><strong>Mid-Jan tune-up:</strong> 5K around 26:00 or 10K around 54:30 means you're on track.</li>
           <li>A bit short? 1:59–2:05 is still a big PR.</li>
         </ul>
@@ -265,8 +266,8 @@ tr:last-child td{border-bottom:0}
       ['Tue','2026-10-20',3,E,'Easy + 5×20s strides'],['Wed','2026-10-21',3,E,'Easy'],['Thu','2026-10-22',3,E,'Easy'],['Sun','2026-10-25',6,L,'Easy long run']]},
     {n:'B5',start:'2026-10-26',cut:true,focus:'Cutback week. Let your body catch up.',days:[
       ['Tue','2026-10-27',3,E,'Easy'],['Wed','2026-10-28',2,E,'Very easy'],['Thu','2026-10-29',3,E,'Easy'],['Sun','2026-11-01',4,L,'Easy long run']]},
-    {n:'B6',start:'2026-11-02',focus:'Threshold test week. Keep Tuesday light so you feel fresh for Wednesday.',days:[
-      ['Tue','2026-11-03',3,E,'Easy + 4×20s strides'],['Wed','2026-11-04',4,W,'Threshold test: 15 min easy, 30 min hardest steady effort, easy cool-down'],['Thu','2026-11-05',3,E,'Very easy'],['Sun','2026-11-08',6,L,'Easy long run']]},
+    {n:'B6',start:'2026-11-02',focus:'Optional threshold test on Wednesday. If you skip it, run 4 easy miles instead.',days:[
+      ['Tue','2026-11-03',3,E,'Easy + 4×20s strides'],['Wed','2026-11-04',4,W,'Optional threshold test: 15 min easy, 30 min hardest steady effort, easy cool-down. Or 4 easy miles.'],['Thu','2026-11-05',3,E,'Very easy'],['Sun','2026-11-08',6,L,'Easy long run']]},
     {n:'B7',start:'2026-11-09',focus:'Biggest bridge week. Use your updated zones from the test.',days:[
       ['Tue','2026-11-10',3,E,'Easy + 6×20s strides'],['Wed','2026-11-11',3,E,'Easy'],['Thu','2026-11-12',3,E,'Easy'],['Sun','2026-11-15',7,L,'Easy long run']]},
     {n:'B8',start:'2026-11-16',focus:'Lead-in week. Arrive at Week 1 fresh.',days:[
@@ -291,7 +292,7 @@ tr:last-child td{border-bottom:0}
       ['Tue','2027-01-12',4,E,'Easy'],['Wed','2027-01-13',4,E,'Easy'],['Thu','2027-01-14',4,E,'Easy'],['Sun','2027-01-17',7,L,'Easy long run or tune-up race']]},
     {n:'Week 9',start:'2027-01-18',focus:'Goal pace starts. First 12-miler.',days:[
       ['Tue','2027-01-19',5,E,'Easy'],['Wed','2027-01-20',5,W,'3 mi at goal pace (9:05–9:10)'],['Thu','2027-01-21',5,E,'Easy'],['Sun','2027-01-24',12,L,'Easy, last 2 mi at goal pace']]},
-    {n:'Week 10',start:'2027-01-25',focus:'Peak week. Checkpoint: goal pace with HR at or under about 170.',days:[
+    {n:'Week 10',start:'2027-01-25',focus:'Peak week. Checkpoint: goal pace with HR at or under about 173.',days:[
       ['Tue','2027-01-26',5,E,'Easy'],['Wed','2027-01-27',5,W,'4 mi at goal pace (9:05–9:10)'],['Thu','2027-01-28',5,E,'Easy'],['Sun','2027-01-31',12,L,'Easy, last 2 mi at goal pace']]},
     {n:'Week 11',start:'2027-02-01',taper:true,focus:'Taper begins. Fitness is banked.',days:[
       ['Tue','2027-02-02',4,E,'Easy'],['Wed','2027-02-03',4,W,'2 mi at goal pace'],['Thu','2027-02-04',4,E,'Easy'],['Sun','2027-02-07',6,L,'Easy long run']]},
@@ -300,7 +301,7 @@ tr:last-child td{border-bottom:0}
   ];
 
   // Heart rate zones (Karvonen). REST_HR from Sarah's COROS.
-  const MAX_HR=191, REST_HR=53;
+  const MAX_HR=196, REST_HR=53;
   (function(){
     const res=MAX_HR-REST_HR, b=[.5,.6,.7,.8,.9,1].map(x=>Math.round(REST_HR+x*res));
     document.getElementById('hr-max').textContent=MAX_HR;
