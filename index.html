@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sarah's Austin Half</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: race-bib header, then a phase switcher; each week is a row of run-day cells you can tick off. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --fg:#17202b; --muted:#5a6878; --line:#dde3ea;
+  --accent:#3a5bc7;      /* bluebonnet */
+  --accent-soft:#e6ecfb;
+  --work:#b5651d; --work-soft:#fbeede;   /* workouts */
+  --long:#1f7a5a; --long-soft:#e1f3eb;   /* long runs */
+  --cut:#7a6a9c; --done:#1f7a5a;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Barlow",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141b; --surface:#171e28; --fg:#e7ecf2; --muted:#98a5b5; --line:#29323e;
+  --accent:#8ea8ff; --accent-soft:#1f2a47; --work:#f0a45c; --work-soft:#3a2716;
+  --long:#5cc79c; --long-soft:#15332a; --cut:#b3a4d6; --done:#5cc79c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#171e28; --fg:#e7ecf2; --muted:#98a5b5; --line:#29323e;
+  --accent:#8ea8ff; --accent-soft:#1f2a47; --work:#f0a45c; --work-soft:#3a2716;
+  --long:#5cc79c; --long-soft:#15332a; --cut:#b3a4d6; --done:#5cc79c; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:24px 64px;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:28px;font-weight:700;letter-spacing:.01em}
+h3{font-size:20px;font-weight:600}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+
+/* bib header */
+.bib{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:18px;position:relative;overflow:hidden}
+.bib::before,.bib::after{content:"";position:absolute;top:14px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.bib::before{left:14px}.bib::after{right:14px}
+.bib-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;padding-inline:12px}
+.bib h1{font-size:clamp(36px,7vw,58px);font-weight:700;letter-spacing:.005em}
+.bib h1 span{color:var(--accent)}
+.bib-sub{color:var(--muted);font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.stat{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.stat b{font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px}
+.tab{font:600 14px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.tab:focus-visible,.chk:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section{display:grid;gap:16px}
+.intro{max-width:68ch;color:var(--muted)}
+.intro strong{color:var(--fg)}
+
+/* weeks */
+.week{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px}
+.week.now{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.wk-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.wk-num{font-family:var(--display);font-size:22px;font-weight:700}
+.wk-dates{color:var(--muted);font-size:14px}
+.wk-miles{margin-left:auto;font-size:13px;color:var(--muted)}
+.wk-miles b{color:var(--fg)}
+.pill{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.pill.cut{color:var(--cut)}.pill.taper{color:var(--accent)}.pill.nowp{color:var(--accent);background:var(--accent-soft);border-color:transparent}
+.focus{font-size:14px;color:var(--muted);max-width:75ch}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.day{border:1px solid var(--line);border-radius:9px;padding:10px 12px;display:grid;gap:4px;align-content:start;min-width:0}
+.day.workout{background:var(--work-soft);border-color:transparent}
+.day.long{background:var(--long-soft);border-color:transparent}
+.day.race{background:var(--accent-soft);border-color:var(--accent)}
+.day-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.day-name{font-weight:600;font-size:13px}
+.day-name span{color:var(--muted);font-weight:500}
+.mi{font-family:var(--display);font-size:24px;font-weight:600;line-height:1}
+.mi small{font-size:14px;color:var(--muted);font-weight:500}
+.kind{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.workout .kind{color:var(--work)}.long .kind{color:var(--long)}.race .kind{color:var(--accent)}
+.detail{font-size:13.5px;line-height:1.45}
+.chk{width:20px;height:20px;accent-color:var(--done);cursor:pointer;flex:none}
+.day.is-done{opacity:.6}
+.note{font-size:13.5px;border-left:3px solid var(--work);padding:2px 0 2px 10px;color:var(--fg)}
+
+/* guidance */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:8px;align-content:start}
+.card ul{margin:0;padding-left:18px;display:grid;gap:6px}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--done);width:0;transition:width .3s}
+.prog-row{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.prog-row .progress{flex:1}
+.foot{font-size:13px;color:var(--muted);max-width:75ch}
+@media (prefers-reduced-motion:reduce){.progress i{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="bib">
+    <div class="bib-top">
+      <div>
+        <div class="label">Austin Half Marathon · Sun, Feb 14, 2027</div>
+        <h1>Sarah's road to <span>sub-2:00</span></h1>
+        <p class="bib-sub">8-week bridge, then a 12-week Hal Higdon Intermediate-style build. Four runs a week, long run on Sunday.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="label">Days to race</span><b id="daysToRace">—</b></div>
+      <div class="stat"><span class="label">Training starts</span><b>Mon, Nov 23</b></div>
+      <div class="stat"><span class="label">Goal (watch pace)</span><b class="mono" style="font-family:var(--display)">9:05 /mi</b></div>
+      <div class="stat"><span class="label">Last year</span><b>2:08:38</b></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Plan sections">
+    <button class="tab" role="tab" id="tab-bridge" aria-controls="bridge" aria-selected="true">Bridge · now–Nov 22</button>
+    <button class="tab" role="tab" id="tab-train" aria-controls="train" aria-selected="false">Training · 12 weeks</button>
+    <button class="tab" role="tab" id="tab-zones" aria-controls="zones" aria-selected="false">Zones &amp; race day</button>
+  </nav>
+
+  <!-- BRIDGE -->
+  <section id="bridge" role="tabpanel" aria-labelledby="tab-bridge">
+    <h2>Bridge: keep fitness until training starts</h2>
+    <p class="intro">She's been running about <strong>2 times a week</strong> with a gap in September. The goal for the next 8 weeks is simple: <strong>get to 4 easy runs a week and a comfortable 6-mile Sunday long run</strong>, so Week 1 of the real plan feels routine. No hard workouts except one threshold test.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>How to run the bridge</h3>
+        <ul>
+          <li><strong>Consistency beats distance.</strong> 3 runs a week for 2 weeks, then 4.</li>
+          <li><strong>Easy means easy:</strong> 11:00–13:00/mi, heart rate under about 147 bpm. It will feel slow. That's the point.</li>
+          <li><strong>Long run grows 1 mile at a time</strong>, from 4 to 7 miles. Don't jump back to 11 just because she's done it before.</li>
+          <li><strong>Strides</strong> from Week 3: after an easy run, 4–6 × 20 seconds quick and relaxed, walking back to recover.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Off days</h3>
+        <ul>
+          <li><strong>Strength twice a week</strong> (Mon and Fri or Sat, 20–25 min): squats, reverse lunges, glute bridges, single-leg calf raises, planks, side planks. 2–3 sets each.</li>
+          <li>Walking, cycling or yoga are fine. Keep one full rest day.</li>
+          <li><strong>Missed a run?</strong> Skip it. Don't double up the next day.</li>
+          <li>Sick or sore in one spot for 3+ days: rest and get it checked.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Breathing and heart rate</h3>
+        <ul>
+          <li>Carry her inhaler on long runs.</li>
+          <li>On cold or high-pollen mornings, take a longer, slower warm-up.</li>
+          <li>On days she uses her rescue inhaler, heart rate may read high. Go by pace and effort.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Ready for Week 1 when…</h3>
+        <ul>
+          <li>She's run 4 days a week for at least 3 weeks.</li>
+          <li>A 6-mile long run feels comfortable.</li>
+          <li>The threshold test is done and her zones are updated.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Workout / test</span><span><i class="sw" style="background:var(--long)"></i>Long run</span></div>
+    <div class="prog-row"><span id="prog-bridge-txt">0 of 0 runs done</span><div class="progress"><i id="prog-bridge"></i></div></div>
+    <div id="bridge-weeks" style="display:grid;gap:12px"></div>
+  </section>
+
+  <!-- TRAINING -->
+  <section id="train" role="tabpanel" aria-labelledby="tab-train" hidden>
+    <h2>12-week build</h2>
+    <p class="intro">Tuesday and Thursday are easy. <strong>Wednesday is the quality day</strong> (tempo, 800s, goal pace); its mileage includes a 1-mile warm-up and cool-down and runs a little long on interval days. <strong>Sunday is the long run</strong>, at easy effort unless noted. Weeks 4 and 8 are cutbacks: don't skip them.</p>
+    <div class="legend"><span><i class="sw" style="background:var(--line)"></i>Easy</span><span><i class="sw" style="background:var(--work)"></i>Workout</span><span><i class="sw" style="background:var(--long)"></i>Long run</span><span><i class="sw" style="background:var(--accent)"></i>Race</span></div>
+    <div class="prog-row"><span id="prog-train-txt">0 of 0 runs done</span><div class="progress"><i id="prog-train"></i></div></div>
+    <div id="train-weeks" style="display:grid;gap:12px"></div>
+  </section>
+
+  <!-- ZONES -->
+  <section id="zones" role="tabpanel" aria-labelledby="tab-zones" hidden>
+    <h2>Zones</h2>
+    <p class="intro">Based on her watch: threshold heart rate <span class="mono">165</span> bpm, threshold pace <span class="mono">9:02</span>/mi. <strong>These are provisional.</strong> She averaged 171 bpm for all of last year's race, so her true threshold may be higher. Update after the threshold test on Nov 4.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Effort</th><th>Heart rate</th><th>Pace</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Easy / Zone 2</strong></td><td class="mono">&lt; 147 bpm</td><td class="mono">11:00–13:00 /mi</td><td>Tue, Thu, most of every long run</td></tr>
+        <tr><td><strong>Goal half pace</strong></td><td class="mono">155–163 bpm</td><td class="mono">9:05–9:10 /mi</td><td>Wednesday goal-pace runs, end of long runs in Weeks 9–10</td></tr>
+        <tr><td><strong>Tempo / threshold</strong></td><td class="mono">157–165 bpm</td><td class="mono">8:50–9:05 /mi</td><td>Wednesday tempo runs and 800s</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Threshold test (Wed, Nov 4)</h3>
+        <ul>
+          <li>10–15 min easy warm-up.</li>
+          <li>30 min at the hardest steady effort she can hold, on flat ground.</li>
+          <li>Average heart rate for the <strong>last 20 minutes</strong> = new threshold HR.</li>
+          <li>Pick a day without her rescue inhaler. A chest strap reads better than the wrist.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Checkpoints for sub-2</h3>
+        <ul>
+          <li><strong>Week 7:</strong> 30-min tempo at 8:50–9:00 feels controlled.</li>
+          <li><strong>Weeks 9–10:</strong> 3–4 mi at 9:05 with HR at or under about 163.</li>
+          <li><strong>Mid-Jan tune-up:</strong> 5K around 26:00 or 10K around 54:30 means she's on track.</li>
+          <li>A bit short? 1:59–2:05 is still a big PR.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Race day plan</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Miles</th><th>Watch pace</th><th>How it should feel</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1–3</td><td class="mono">9:15–9:20</td><td>Held back on purpose. Last year she averaged 171 bpm, so starting fast costs her later.</td></tr>
+        <tr><td class="mono">4–10</td><td class="mono">9:05</td><td>Steady and focused. Run hills by effort, not pace.</td></tr>
+        <tr><td class="mono">11–13.1</td><td class="mono">≤ 9:00</td><td>If she feels good, push. This is where the time comes back.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot">Why 9:05 and not 9:09? Her watch measured last year's course at 13.2 miles. GPS usually reads long on race courses, so 9:05 on the watch gives her a buffer to finish under 2:00. Carry her inhaler, and take a gel around mile 5 and mile 9 if she's practiced with them on long runs.</p>
+  </section>
+
+  <p class="foot">Plan by week follows Hal Higdon's Intermediate half marathon structure, adjusted to Sarah's run days and current base. Checkmarks save in this browser only.</p>
+</div>
+
+<script>
+(function(){
+  const E='easy',W='workout',L='long',R='race';
+  const bridge=[
+    {n:'B1',start:'2026-09-28',focus:'Back to a routine. Three easy runs.',days:[
+      ['Tue','2026-09-29',3,E,'Easy'],['Thu','2026-10-01',3,E,'Easy'],['Sun','2026-10-04',4,L,'Easy long run']]},
+    {n:'B2',start:'2026-10-05',focus:'Same three days, long run up by a mile.',days:[
+      ['Tue','2026-10-06',3,E,'Easy'],['Thu','2026-10-08',3,E,'Easy'],['Sun','2026-10-11',5,L,'Easy long run']]},
+    {n:'B3',start:'2026-10-12',focus:'Add Wednesday as a short run. Start strides.',days:[
+      ['Tue','2026-10-13',3,E,'Easy + 4×20s strides'],['Wed','2026-10-14',2,E,'Very easy'],['Thu','2026-10-15',3,E,'Easy'],['Sun','2026-10-18',5,L,'Easy long run']]},
+    {n:'B4',start:'2026-10-19',focus:'Four runs a week is now the normal.',days:[
+      ['Tue','2026-10-20',3,E,'Easy + 5×20s strides'],['Wed','2026-10-21',3,E,'Easy'],['Thu','2026-10-22',3,E,'Easy'],['Sun','2026-10-25',6,L,'Easy long run']]},
+    {n:'B5',start:'2026-10-26',cut:true,focus:'Cutback week. Let the body catch up.',days:[
+      ['Tue','2026-10-27',3,E,'Easy'],['Wed','2026-10-28',2,E,'Very easy'],['Thu','2026-10-29',3,E,'Easy'],['Sun','2026-11-01',4,L,'Easy long run']]},
+    {n:'B6',start:'2026-11-02',focus:'Threshold test week. Keep Tuesday light so she is fresh for Wednesday.',days:[
+      ['Tue','2026-11-03',3,E,'Easy + 4×20s strides'],['Wed','2026-11-04',4,W,'Threshold test: 15 min easy, 30 min hardest steady effort, easy cool-down'],['Thu','2026-11-05',3,E,'Very easy'],['Sun','2026-11-08',6,L,'Easy long run']]},
+    {n:'B7',start:'2026-11-09',focus:'Biggest bridge week. Use updated zones from the test.',days:[
+      ['Tue','2026-11-10',3,E,'Easy + 6×20s strides'],['Wed','2026-11-11',3,E,'Easy'],['Thu','2026-11-12',3,E,'Easy'],['Sun','2026-11-15',7,L,'Easy long run']]},
+    {n:'B8',start:'2026-11-16',focus:'Lead-in week. Arrive at Week 1 fresh.',days:[
+      ['Tue','2026-11-17',3,E,'Easy + 4×20s strides'],['Wed','2026-11-18',3,E,'Easy'],['Thu','2026-11-19',3,E,'Easy'],['Sun','2026-11-22',5,L,'Easy long run']]},
+  ];
+  const train=[
+    {n:'Week 1',start:'2026-11-23',focus:'First tempo run. Keep it short and controlled.',note:'Thanksgiving is Thursday: run it early or move it to Friday.',days:[
+      ['Tue','2026-11-24',3,E,'Easy'],['Wed','2026-11-25',3,W,'15 min tempo (8:50–9:05)'],['Thu','2026-11-26',3,E,'Easy'],['Sun','2026-11-29',6,L,'Easy long run']]},
+    {n:'Week 2',start:'2026-11-30',focus:'Tempo grows by 5 minutes.',days:[
+      ['Tue','2026-12-01',3,E,'Easy'],['Wed','2026-12-02',3,W,'20 min tempo'],['Thu','2026-12-03',3,E,'Easy'],['Sun','2026-12-06',7,L,'Easy long run']]},
+    {n:'Week 3',start:'2026-12-07',focus:'First 8-miler of the build.',days:[
+      ['Tue','2026-12-08',4,E,'Easy'],['Wed','2026-12-09',4,W,'25 min tempo'],['Thu','2026-12-10',4,E,'Easy'],['Sun','2026-12-13',8,L,'Easy long run']]},
+    {n:'Week 4',start:'2026-12-14',cut:true,focus:'Cutback. All easy.',days:[
+      ['Tue','2026-12-15',3,E,'Easy'],['Wed','2026-12-16',3,E,'Easy'],['Thu','2026-12-17',3,E,'Easy'],['Sun','2026-12-20',6,L,'Easy long run']]},
+    {n:'Week 5',start:'2026-12-21',focus:'First interval session.',note:'Christmas Eve is Thursday: swap days freely.',days:[
+      ['Tue','2026-12-22',4,E,'Easy'],['Wed','2026-12-23',4,W,'5×800m at 8:40–8:55, 2–3 min jog between'],['Thu','2026-12-24',4,E,'Easy'],['Sun','2026-12-27',9,L,'Easy long run']]},
+    {n:'Week 6',start:'2026-12-28',focus:'Longest tempo of the plan. Double-digit long run.',note:"New Year's Eve is Thursday.",days:[
+      ['Tue','2026-12-29',4,E,'Easy'],['Wed','2026-12-30',4,W,'30 min tempo'],['Thu','2026-12-31',4,E,'Easy'],['Sun','2027-01-03',10,L,'Easy long run']]},
+    {n:'Week 7',start:'2027-01-04',focus:'Checkpoint: intervals should feel controlled.',days:[
+      ['Tue','2027-01-05',4,E,'Easy'],['Wed','2027-01-06',4,W,'6×800m at 8:40–8:55, 2–3 min jog between'],['Thu','2027-01-07',4,E,'Easy'],['Sun','2027-01-10',11,L,'Easy long run']]},
+    {n:'Week 8',start:'2027-01-11',cut:true,focus:'Cutback. Good week for a tune-up race.',note:'Optional: replace Sunday with a 5K or 10K race. About 26:00 / 54:30 means sub-2 is on track.',days:[
+      ['Tue','2027-01-12',4,E,'Easy'],['Wed','2027-01-13',4,E,'Easy'],['Thu','2027-01-14',4,E,'Easy'],['Sun','2027-01-17',7,L,'Easy long run or tune-up race']]},
+    {n:'Week 9',start:'2027-01-18',focus:'Goal pace starts. First 12-miler.',days:[
+      ['Tue','2027-01-19',5,E,'Easy'],['Wed','2027-01-20',5,W,'3 mi at goal pace (9:05–9:10)'],['Thu','2027-01-21',5,E,'Easy'],['Sun','2027-01-24',12,L,'Easy, last 2 mi at goal pace']]},
+    {n:'Week 10',start:'2027-01-25',focus:'Peak week. Checkpoint: goal pace with HR at or under about 163.',days:[
+      ['Tue','2027-01-26',5,E,'Easy'],['Wed','2027-01-27',5,W,'4 mi at goal pace (9:05–9:10)'],['Thu','2027-01-28',5,E,'Easy'],['Sun','2027-01-31',12,L,'Easy, last 2 mi at goal pace']]},
+    {n:'Week 11',start:'2027-02-01',taper:true,focus:'Taper begins. Fitness is banked.',days:[
+      ['Tue','2027-02-02',4,E,'Easy'],['Wed','2027-02-03',4,W,'2 mi at goal pace'],['Thu','2027-02-04',4,E,'Easy'],['Sun','2027-02-07',6,L,'Easy long run']]},
+    {n:'Week 12',start:'2027-02-08',taper:true,focus:'Race week. Short, easy, lots of sleep.',days:[
+      ['Tue','2027-02-09',2,E,'Easy + 3 strides'],['Wed','2027-02-10',2,E,'Easy'],['Thu','2027-02-11',2,E,'Easy'],['Sun','2027-02-14',13.1,R,'Austin Half Marathon. Goal sub-2:00.']]},
+  ];
+
+  const KEY='sarah-ahm-done-v1';
+  let done={};
+  try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){done={}}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}};
+
+  const d=s=>new Date(s+'T12:00:00');
+  const fmt=s=>d(s).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const today=new Date();today.setHours(12,0,0,0);
+  const kindLabel={easy:'Easy',workout:'Workout',long:'Long run',race:'Race'};
+
+  function render(list,el,isBridge){
+    el.innerHTML='';
+    list.forEach(w=>{
+      const s=d(w.start),e=new Date(s);e.setDate(e.getDate()+6);
+      const isNow=today>=s&&today<=e;
+      const total=w.days.reduce((a,x)=>a+x[2],0);
+      const card=document.createElement('article');
+      card.className='week'+(isNow?' now':'');
+      if(isNow)card.id=isBridge?'now-bridge':'now-train';
+      let pills='';
+      if(isNow)pills+='<span class="pill nowp">This week</span>';
+      if(w.cut)pills+='<span class="pill cut">Cutback</span>';
+      if(w.taper)pills+='<span class="pill taper">Taper</span>';
+      const endStr=e.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      card.innerHTML=`<div class="wk-head"><span class="wk-num">${w.n}</span><span class="wk-dates">${fmt(w.start)} – ${endStr}</span>${pills}<span class="wk-miles">Total <b class="mono">${Number.isInteger(total)?total:total.toFixed(1)}</b> mi</span></div>
+        <p class="focus">${w.focus}</p>
+        <div class="days"></div>${w.note?`<p class="note">${w.note}</p>`:''}`;
+      const grid=card.querySelector('.days');
+      w.days.forEach(([dn,date,mi,kind,detail])=>{
+        const id=date;
+        const cell=document.createElement('div');
+        cell.className='day '+kind+(done[id]?' is-done':'');
+        cell.innerHTML=`<div class="day-top"><span class="day-name">${dn} <span>${fmt(date)}</span></span>
+          <input type="checkbox" class="chk" id="c-${id}" aria-label="Mark ${dn} ${fmt(date)} done" ${done[id]?'checked':''}></div>
+          <div class="mi">${mi}<small> mi</small></div><div class="kind">${kindLabel[kind]}</div><div class="detail">${detail}</div>`;
+        cell.querySelector('input').addEventListener('change',ev=>{
+          if(ev.target.checked)done[id]=1;else delete done[id];
+          cell.classList.toggle('is-done',ev.target.checked);save();progress();
+        });
+        grid.appendChild(cell);
+      });
+      el.appendChild(card);
+    });
+  }
+  function progress(){
+    [['bridge',bridge],['train',train]].forEach(([k,list])=>{
+      const all=list.flatMap(w=>w.days.map(x=>x[1]));
+      const n=all.filter(x=>done[x]).length;
+      document.getElementById('prog-'+k).style.width=(all.length?n/all.length*100:0)+'%';
+      document.getElementById('prog-'+k+'-txt').textContent=`${n} of ${all.length} runs done`;
+    });
+  }
+  render(bridge,document.getElementById('bridge-weeks'),true);
+  render(train,document.getElementById('train-weeks'),false);
+  progress();
+
+  const race=d('2027-02-14');
+  const days=Math.max(0,Math.round((race-today)/864e5));
+  document.getElementById('daysToRace').textContent=days;
+
+  const tabs=[...document.querySelectorAll('.tab')];
+  function show(id){
+    tabs.forEach(t=>{const on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});
+    try{localStorage.setItem(KEY+'-tab',id)}catch(e){}
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>show(t.getAttribute('aria-controls'))));
+  let start=today>=d('2026-11-23')?'train':'bridge';
+  const h=(location.hash||'').slice(1);
+  if(['bridge','train','zones'].includes(h))start=h;
+  else{try{const s=localStorage.getItem(KEY+'-tab');if(s)start=s}catch(e){}}
+  show(start);
+})();
+</script>
+</body>
+</html>
